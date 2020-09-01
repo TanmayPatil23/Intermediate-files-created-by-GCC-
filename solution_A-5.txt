@@ -1,0 +1,166 @@
+A-5.c file -- C source code that should be preprocessed.
+--------------------------------------------------------
+
+int main()
+{
+    int a, b, c, d;
+
+    d = 10;
+    if (c > d) {
+        a = 3;
+        b = 2;
+    } else {
+        a = 2;
+        b = 3;
+    }
+
+    c = a + b;
+}
+
+
+
+A-5.i file -- C source code that should not be preprocessed.
+-----------------------------------------------------------
+
+# 1 "A-5.c"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 31 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 32 "<command-line>" 2
+# 1 "A-5.c"
+int main()
+{
+    int a, b, c, d;
+
+    d = 10;
+    if (c > d) {
+        a = 3;
+        b = 2;
+    } else {
+        a = 2;
+        b = 3;
+    }
+
+    c = a + b;
+}
+
+
+
+A-5.s file -- Assembler code.
+-----------------------------
+
+	.file	"A-5.c"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	$10, -8(%rbp)
+	movl	-4(%rbp), %eax
+	cmpl	-8(%rbp), %eax
+	jle	.L2
+	movl	$3, -16(%rbp)
+	movl	$2, -12(%rbp)
+	jmp	.L3
+.L2:
+	movl	$2, -16(%rbp)
+	movl	$3, -12(%rbp)
+.L3:
+	movl	-16(%rbp), %edx
+	movl	-12(%rbp), %eax
+	addl	%edx, %eax
+	movl	%eax, -4(%rbp)
+	movl	$0, %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 9.3.0-10ubuntu2) 9.3.0"
+	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.align 8
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.align 8
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 8
+4:
+
+
+
+Dump of A-5.o using objdump options -l -d -r
+--------------------------------------------
+
+A-5.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <main>:
+main():
+   0:	f3 0f 1e fa          	endbr64 
+   4:	55                   	push   %rbp
+   5:	48 89 e5             	mov    %rsp,%rbp
+   8:	c7 45 f8 0a 00 00 00 	movl   $0xa,-0x8(%rbp)
+   f:	8b 45 fc             	mov    -0x4(%rbp),%eax
+  12:	3b 45 f8             	cmp    -0x8(%rbp),%eax
+  15:	7e 10                	jle    27 <main+0x27>
+  17:	c7 45 f0 03 00 00 00 	movl   $0x3,-0x10(%rbp)
+  1e:	c7 45 f4 02 00 00 00 	movl   $0x2,-0xc(%rbp)
+  25:	eb 0e                	jmp    35 <main+0x35>
+  27:	c7 45 f0 02 00 00 00 	movl   $0x2,-0x10(%rbp)
+  2e:	c7 45 f4 03 00 00 00 	movl   $0x3,-0xc(%rbp)
+  35:	8b 55 f0             	mov    -0x10(%rbp),%edx
+  38:	8b 45 f4             	mov    -0xc(%rbp),%eax
+  3b:	01 d0                	add    %edx,%eax
+  3d:	89 45 fc             	mov    %eax,-0x4(%rbp)
+  40:	b8 00 00 00 00       	mov    $0x0,%eax
+  45:	5d                   	pop    %rbp
+  46:	c3                   	retq 
+
+
+Dump of A-5.o using objdump options --prefix-addresses
+------------------------------------------------------
+
+A-5.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+main():
+0000000000000000 <main> endbr64 
+0000000000000004 <main+0x4> push   %rbp
+0000000000000005 <main+0x5> mov    %rsp,%rbp
+0000000000000008 <main+0x8> movl   $0xa,-0x8(%rbp)
+000000000000000f <main+0xf> mov    -0x4(%rbp),%eax
+0000000000000012 <main+0x12> cmp    -0x8(%rbp),%eax
+0000000000000015 <main+0x15> jle    0000000000000027 <main+0x27>
+0000000000000017 <main+0x17> movl   $0x3,-0x10(%rbp)
+000000000000001e <main+0x1e> movl   $0x2,-0xc(%rbp)
+0000000000000025 <main+0x25> jmp    0000000000000035 <main+0x35>
+0000000000000027 <main+0x27> movl   $0x2,-0x10(%rbp)
+000000000000002e <main+0x2e> movl   $0x3,-0xc(%rbp)
+0000000000000035 <main+0x35> mov    -0x10(%rbp),%edx
+0000000000000038 <main+0x38> mov    -0xc(%rbp),%eax
+000000000000003b <main+0x3b> add    %edx,%eax
+000000000000003d <main+0x3d> mov    %eax,-0x4(%rbp)
+0000000000000040 <main+0x40> mov    $0x0,%eax
+0000000000000045 <main+0x45> pop    %rbp
+0000000000000046 <main+0x46> retq

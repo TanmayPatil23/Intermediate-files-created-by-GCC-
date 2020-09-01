@@ -1,0 +1,206 @@
+A-4.c file -- C source code that should be preprocessed.
+--------------------------------------------------------
+
+int main()
+{
+    int a[3];
+    int b[] = {1, 2, 3};
+    int i, *p;
+    for (i=0; i<3; i++) {
+        a[i] = b[i];
+    }
+    p = a;
+    *(p + 2) = 5;
+}
+
+
+
+A-4.i file -- C source code that should not be preprocessed.
+-----------------------------------------------------------
+
+# 1 "A-4.c"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 31 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 32 "<command-line>" 2
+# 1 "A-4.c"
+int main()
+{
+    int a[3];
+    int b[] = {1, 2, 3};
+    int i, *p;
+    for (i=0; i<3; i++) {
+        a[i] = b[i];
+    }
+    p = a;
+    *(p + 2) = 5;
+}
+
+
+
+A-4.s file -- Assembler code.
+-----------------------------
+
+	.file	"A-4.c"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$48, %rsp
+	movq	%fs:40, %rax
+	movq	%rax, -8(%rbp)
+	xorl	%eax, %eax
+	movl	$1, -20(%rbp)
+	movl	$2, -16(%rbp)
+	movl	$3, -12(%rbp)
+	movl	$0, -44(%rbp)
+	jmp	.L2
+.L3:
+	movl	-44(%rbp), %eax
+	cltq
+	movl	-20(%rbp,%rax,4), %edx
+	movl	-44(%rbp), %eax
+	cltq
+	movl	%edx, -32(%rbp,%rax,4)
+	addl	$1, -44(%rbp)
+.L2:
+	cmpl	$2, -44(%rbp)
+	jle	.L3
+	leaq	-32(%rbp), %rax
+	movq	%rax, -40(%rbp)
+	movq	-40(%rbp), %rax
+	addq	$8, %rax
+	movl	$5, (%rax)
+	movl	$0, %eax
+	movq	-8(%rbp), %rcx
+	xorq	%fs:40, %rcx
+	je	.L5
+	call	__stack_chk_fail@PLT
+.L5:
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 9.3.0-10ubuntu2) 9.3.0"
+	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.align 8
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.align 8
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 8
+4:
+
+
+
+Dump of A-4.o using objdump options -l -d -r
+--------------------------------------------
+
+A-4.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <main>:
+main():
+   0:	f3 0f 1e fa          	endbr64 
+   4:	55                   	push   %rbp
+   5:	48 89 e5             	mov    %rsp,%rbp
+   8:	48 83 ec 30          	sub    $0x30,%rsp
+   c:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+  13:	00 00 
+  15:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  19:	31 c0                	xor    %eax,%eax
+  1b:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%rbp)
+  22:	c7 45 f0 02 00 00 00 	movl   $0x2,-0x10(%rbp)
+  29:	c7 45 f4 03 00 00 00 	movl   $0x3,-0xc(%rbp)
+  30:	c7 45 d4 00 00 00 00 	movl   $0x0,-0x2c(%rbp)
+  37:	eb 16                	jmp    4f <main+0x4f>
+  39:	8b 45 d4             	mov    -0x2c(%rbp),%eax
+  3c:	48 98                	cltq   
+  3e:	8b 54 85 ec          	mov    -0x14(%rbp,%rax,4),%edx
+  42:	8b 45 d4             	mov    -0x2c(%rbp),%eax
+  45:	48 98                	cltq   
+  47:	89 54 85 e0          	mov    %edx,-0x20(%rbp,%rax,4)
+  4b:	83 45 d4 01          	addl   $0x1,-0x2c(%rbp)
+  4f:	83 7d d4 02          	cmpl   $0x2,-0x2c(%rbp)
+  53:	7e e4                	jle    39 <main+0x39>
+  55:	48 8d 45 e0          	lea    -0x20(%rbp),%rax
+  59:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
+  5d:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+  61:	48 83 c0 08          	add    $0x8,%rax
+  65:	c7 00 05 00 00 00    	movl   $0x5,(%rax)
+  6b:	b8 00 00 00 00       	mov    $0x0,%eax
+  70:	48 8b 4d f8          	mov    -0x8(%rbp),%rcx
+  74:	64 48 33 0c 25 28 00 	xor    %fs:0x28,%rcx
+  7b:	00 00 
+  7d:	74 05                	je     84 <main+0x84>
+  7f:	e8 00 00 00 00       	callq  84 <main+0x84>
+			80: R_X86_64_PLT32	__stack_chk_fail-0x4
+  84:	c9                   	leaveq 
+  85:	c3                   	retq
+
+
+
+Dump of A-4.o using objdump options --prefix-addresses
+------------------------------------------------------
+
+A-4.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+main():
+0000000000000000 <main> endbr64 
+0000000000000004 <main+0x4> push   %rbp
+0000000000000005 <main+0x5> mov    %rsp,%rbp
+0000000000000008 <main+0x8> sub    $0x30,%rsp
+000000000000000c <main+0xc> mov    %fs:0x28,%rax
+0000000000000015 <main+0x15> mov    %rax,-0x8(%rbp)
+0000000000000019 <main+0x19> xor    %eax,%eax
+000000000000001b <main+0x1b> movl   $0x1,-0x14(%rbp)
+0000000000000022 <main+0x22> movl   $0x2,-0x10(%rbp)
+0000000000000029 <main+0x29> movl   $0x3,-0xc(%rbp)
+0000000000000030 <main+0x30> movl   $0x0,-0x2c(%rbp)
+0000000000000037 <main+0x37> jmp    000000000000004f <main+0x4f>
+0000000000000039 <main+0x39> mov    -0x2c(%rbp),%eax
+000000000000003c <main+0x3c> cltq   
+000000000000003e <main+0x3e> mov    -0x14(%rbp,%rax,4),%edx
+0000000000000042 <main+0x42> mov    -0x2c(%rbp),%eax
+0000000000000045 <main+0x45> cltq   
+0000000000000047 <main+0x47> mov    %edx,-0x20(%rbp,%rax,4)
+000000000000004b <main+0x4b> addl   $0x1,-0x2c(%rbp)
+000000000000004f <main+0x4f> cmpl   $0x2,-0x2c(%rbp)
+0000000000000053 <main+0x53> jle    0000000000000039 <main+0x39>
+0000000000000055 <main+0x55> lea    -0x20(%rbp),%rax
+0000000000000059 <main+0x59> mov    %rax,-0x28(%rbp)
+000000000000005d <main+0x5d> mov    -0x28(%rbp),%rax
+0000000000000061 <main+0x61> add    $0x8,%rax
+0000000000000065 <main+0x65> movl   $0x5,(%rax)
+000000000000006b <main+0x6b> mov    $0x0,%eax
+0000000000000070 <main+0x70> mov    -0x8(%rbp),%rcx
+0000000000000074 <main+0x74> xor    %fs:0x28,%rcx
+000000000000007d <main+0x7d> je     0000000000000084 <main+0x84>
+000000000000007f <main+0x7f> callq  0000000000000084 <main+0x84>
+			80: R_X86_64_PLT32	__stack_chk_fail-0x4
+0000000000000084 <main+0x84> leaveq 
+0000000000000085 <main+0x85> retq

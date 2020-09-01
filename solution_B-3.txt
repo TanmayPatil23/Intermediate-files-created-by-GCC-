@@ -1,0 +1,182 @@
+B-3.c file -- C source code that should be preprocessed.
+--------------------------------------------------------
+
+#include <stdio.h>
+int main ()
+{
+   int a, b;
+   for (a=4 ; a<100; a++) {
+       if (a < 4)
+           b = b + 2;
+       else
+           b = b * 2;
+   }
+   printf ("%d%d", a, b);
+}
+
+
+
+B-3.i file -- C source code that should not be preprocessed.
+-----------------------------------------------------------
+
+1 "B-3.c"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 31 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 32 "<command-line>" 2
+# 1 "B-3.c"
+int main ()
+{
+   int a, b;
+   for (a=4 ; a<100; a++) {
+       if (a < 4)
+           b = b + 2;
+       else
+           b = b * 2;
+   }
+   printf ("%d%d", a, b);
+}
+
+
+
+B-3.s file -- Assembler code.
+-----------------------------
+
+	.file	"B-3.c"
+	.text
+	.section	.rodata
+.LC0:
+	.string	"%d%d"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$16, %rsp
+	movl	$4, -8(%rbp)
+	jmp	.L2
+.L5:
+	cmpl	$3, -8(%rbp)
+	jg	.L3
+	addl	$2, -4(%rbp)
+	jmp	.L4
+.L3:
+	sall	-4(%rbp)
+.L4:
+	addl	$1, -8(%rbp)
+.L2:
+	cmpl	$99, -8(%rbp)
+	jle	.L5
+	movl	-4(%rbp), %edx
+	movl	-8(%rbp), %eax
+	movl	%eax, %esi
+	leaq	.LC0(%rip), %rdi
+	movl	$0, %eax
+	call	printf@PLT
+	movl	$0, %eax
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 9.3.0-10ubuntu2) 9.3.0"
+	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.align 8
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.align 8
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 8
+4:
+
+
+
+Dump of B-3.o using objdump options -l -d -r
+--------------------------------------------
+
+B-3.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <main>:
+main():
+   0:	f3 0f 1e fa          	endbr64 
+   4:	55                   	push   %rbp
+   5:	48 89 e5             	mov    %rsp,%rbp
+   8:	48 83 ec 10          	sub    $0x10,%rsp
+   c:	c7 45 f8 04 00 00 00 	movl   $0x4,-0x8(%rbp)
+  13:	eb 13                	jmp    28 <main+0x28>
+  15:	83 7d f8 03          	cmpl   $0x3,-0x8(%rbp)
+  19:	7f 06                	jg     21 <main+0x21>
+  1b:	83 45 fc 02          	addl   $0x2,-0x4(%rbp)
+  1f:	eb 03                	jmp    24 <main+0x24>
+  21:	d1 65 fc             	shll   -0x4(%rbp)
+  24:	83 45 f8 01          	addl   $0x1,-0x8(%rbp)
+  28:	83 7d f8 63          	cmpl   $0x63,-0x8(%rbp)
+  2c:	7e e7                	jle    15 <main+0x15>
+  2e:	8b 55 fc             	mov    -0x4(%rbp),%edx
+  31:	8b 45 f8             	mov    -0x8(%rbp),%eax
+  34:	89 c6                	mov    %eax,%esi
+  36:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi     # 3d <main+0x3d>
+			39: R_X86_64_PC32	.rodata-0x4
+  3d:	b8 00 00 00 00       	mov    $0x0,%eax
+  42:	e8 00 00 00 00       	callq  47 <main+0x47>
+			43: R_X86_64_PLT32	printf-0x4
+  47:	b8 00 00 00 00       	mov    $0x0,%eax
+  4c:	c9                   	leaveq 
+  4d:	c3                   	retq 
+
+
+
+Dump of B-3.o using objdump options --prefix-addresses
+------------------------------------------------------
+
+B-3.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+main():
+0000000000000000 <main> endbr64 
+0000000000000004 <main+0x4> push   %rbp
+0000000000000005 <main+0x5> mov    %rsp,%rbp
+0000000000000008 <main+0x8> sub    $0x10,%rsp
+000000000000000c <main+0xc> movl   $0x4,-0x8(%rbp)
+0000000000000013 <main+0x13> jmp    0000000000000028 <main+0x28>
+0000000000000015 <main+0x15> cmpl   $0x3,-0x8(%rbp)
+0000000000000019 <main+0x19> jg     0000000000000021 <main+0x21>
+000000000000001b <main+0x1b> addl   $0x2,-0x4(%rbp)
+000000000000001f <main+0x1f> jmp    0000000000000024 <main+0x24>
+0000000000000021 <main+0x21> shll   -0x4(%rbp)
+0000000000000024 <main+0x24> addl   $0x1,-0x8(%rbp)
+0000000000000028 <main+0x28> cmpl   $0x63,-0x8(%rbp)
+000000000000002c <main+0x2c> jle    0000000000000015 <main+0x15>
+000000000000002e <main+0x2e> mov    -0x4(%rbp),%edx
+0000000000000031 <main+0x31> mov    -0x8(%rbp),%eax
+0000000000000034 <main+0x34> mov    %eax,%esi
+0000000000000036 <main+0x36> lea    0x0(%rip),%rdi    # 000000000000003d <main+0x3d>
+			39: R_X86_64_PC32	.rodata-0x4
+000000000000003d <main+0x3d> mov    $0x0,%eax
+0000000000000042 <main+0x42> callq  0000000000000047 <main+0x47>
+			43: R_X86_64_PLT32	printf-0x4
+0000000000000047 <main+0x47> mov    $0x0,%eax
+000000000000004c <main+0x4c> leaveq 
+000000000000004d <main+0x4d> retq

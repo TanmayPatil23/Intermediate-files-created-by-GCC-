@@ -1,0 +1,170 @@
+A-1.c file -- C source code that should be preprocessed.
+--------------------------------------------------------
+
+int Z;
+
+void main()
+{
+        int a, b, c;
+        int p = 6;
+        int q;
+//        double r;
+
+        a = 10;
+        b = 20;
+       
+       	c = a * b + 25;
+       
+       	p = 6;
+        q = Z;
+      /*  r = 34.5;
+        Z = r;
+        Z = Z + 1;
+	*/
+	
+}
+
+
+
+A-1.i file -- C source code that should not be preprocessed.
+-----------------------------------------------------------
+
+# 1 "A-1.c"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 31 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 32 "<command-line>" 2
+# 1 "A-1.c"
+int Z;
+
+void main()
+{
+        int a, b, c;
+        int p = 6;
+        int q;
+
+
+        a = 10;
+        b = 20;
+
+        c = a * b + 25;
+
+        p = 6;
+        q = Z;
+
+
+
+
+
+}
+
+
+A-1.s file -- Assembler code.
+-----------------------------
+
+	.file	"A-1.c"
+	.text
+	.comm	Z,4,4
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	$6, -20(%rbp)
+	movl	$10, -16(%rbp)
+	movl	$20, -12(%rbp)
+	movl	-16(%rbp), %eax
+	imull	-12(%rbp), %eax
+	addl	$25, %eax
+	movl	%eax, -8(%rbp)
+	movl	$6, -20(%rbp)
+	movl	Z(%rip), %eax
+	movl	%eax, -4(%rbp)
+	nop
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 9.3.0-10ubuntu2) 9.3.0"
+	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.align 8
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.align 8
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 8
+4:
+
+
+Dump of A-1.o using objdump options -l -d -r
+--------------------------------------------
+
+A-1.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <main>:
+main():
+   0:	f3 0f 1e fa          	endbr64 
+   4:	55                   	push   %rbp
+   5:	48 89 e5             	mov    %rsp,%rbp
+   8:	c7 45 ec 06 00 00 00 	movl   $0x6,-0x14(%rbp)
+   f:	c7 45 f0 0a 00 00 00 	movl   $0xa,-0x10(%rbp)
+  16:	c7 45 f4 14 00 00 00 	movl   $0x14,-0xc(%rbp)
+  1d:	8b 45 f0             	mov    -0x10(%rbp),%eax
+  20:	0f af 45 f4          	imul   -0xc(%rbp),%eax
+  24:	83 c0 19             	add    $0x19,%eax
+  27:	89 45 f8             	mov    %eax,-0x8(%rbp)
+  2a:	c7 45 ec 06 00 00 00 	movl   $0x6,-0x14(%rbp)
+  31:	8b 05 00 00 00 00    	mov    0x0(%rip),%eax     # 37 <main+0x37>
+			33: R_X86_64_PC32	Z-0x4
+  37:	89 45 fc             	mov    %eax,-0x4(%rbp)
+  3a:	90                   	nop
+  3b:	5d                   	pop    %rbp
+  3c:	c3                   	retq   
+
+
+Dump of A-1.o using objdump options --prefix-addresses
+------------------------------------------------------
+
+A-1.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+main():
+0000000000000000 <main> endbr64 
+0000000000000004 <main+0x4> push   %rbp
+0000000000000005 <main+0x5> mov    %rsp,%rbp
+0000000000000008 <main+0x8> movl   $0x6,-0x14(%rbp)
+000000000000000f <main+0xf> movl   $0xa,-0x10(%rbp)
+0000000000000016 <main+0x16> movl   $0x14,-0xc(%rbp)
+000000000000001d <main+0x1d> mov    -0x10(%rbp),%eax
+0000000000000020 <main+0x20> imul   -0xc(%rbp),%eax
+0000000000000024 <main+0x24> add    $0x19,%eax
+0000000000000027 <main+0x27> mov    %eax,-0x8(%rbp)
+000000000000002a <main+0x2a> movl   $0x6,-0x14(%rbp)
+0000000000000031 <main+0x31> mov    0x0(%rip),%eax # 0000000000000037 <main+0x37>
+			33: R_X86_64_PC32	Z-0x4
+0000000000000037 <main+0x37> mov    %eax,-0x4(%rbp)
+000000000000003a <main+0x3a> nop
+000000000000003b <main+0x3b> pop    %rbp
+000000000000003c <main+0x3c> retq 

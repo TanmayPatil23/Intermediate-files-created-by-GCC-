@@ -1,0 +1,198 @@
+A-2.c file -- C source code that should be preprocessed.
+--------------------------------------------------------
+
+int Z;
+
+void f()
+{
+        int a, b, c;
+        a = Z;
+        if (a < 10) {
+                b = 5;
+                c = 17;
+        } else {
+                b = 6;
+                c = 20;
+                if (a == 0) {
+                        c = 0;
+                }
+        }
+        Z = b * 10 + c;
+}
+
+
+A-2.i file -- C source code that should not be preprocessed.
+-----------------------------------------------------------
+
+# 1 "A-2.c"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 31 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 32 "<command-line>" 2
+# 1 "A-2.c"
+int Z;
+
+void f()
+{
+        int a, b, c;
+        a = Z;
+        if (a < 10) {
+                b = 5;
+                c = 17;
+        } else {
+                b = 6;
+                c = 20;
+                if (a == 0) {
+                        c = 0;
+                }
+        }
+        Z = b * 10 + c;
+}
+
+
+A-2.s file -- Assembler code.
+-----------------------------
+
+	.file	"A-2.c"
+	.text
+	.comm	Z,4,4
+	.globl	f
+	.type	f, @function
+f:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	Z(%rip), %eax
+	movl	%eax, -4(%rbp)
+	cmpl	$9, -4(%rbp)
+	jg	.L2
+	movl	$5, -12(%rbp)
+	movl	$17, -8(%rbp)
+	jmp	.L3
+.L2:
+	movl	$6, -12(%rbp)
+	movl	$20, -8(%rbp)
+	cmpl	$0, -4(%rbp)
+	jne	.L3
+	movl	$0, -8(%rbp)
+.L3:
+	movl	-12(%rbp), %edx
+	movl	%edx, %eax
+	sall	$2, %eax
+	addl	%edx, %eax
+	addl	%eax, %eax
+	movl	%eax, %edx
+	movl	-8(%rbp), %eax
+	addl	%edx, %eax
+	movl	%eax, Z(%rip)
+	nop
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	f, .-f
+	.ident	"GCC: (Ubuntu 9.3.0-10ubuntu2) 9.3.0"
+	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.align 8
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.align 8
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 8
+4:
+
+
+Dump of A-2.o using objdump options -l -d -r
+--------------------------------------------
+
+A-2.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <f>:
+f():
+   0:	f3 0f 1e fa          	endbr64 
+   4:	55                   	push   %rbp
+   5:	48 89 e5             	mov    %rsp,%rbp
+   8:	8b 05 00 00 00 00    	mov    0x0(%rip),%eax        # e <f+0xe>
+			a: R_X86_64_PC32	Z-0x4
+   e:	89 45 fc             	mov    %eax,-0x4(%rbp)
+  11:	83 7d fc 09          	cmpl   $0x9,-0x4(%rbp)
+  15:	7f 10                	jg     27 <f+0x27>
+  17:	c7 45 f4 05 00 00 00 	movl   $0x5,-0xc(%rbp)
+  1e:	c7 45 f8 11 00 00 00 	movl   $0x11,-0x8(%rbp)
+  25:	eb 1b                	jmp    42 <f+0x42>
+  27:	c7 45 f4 06 00 00 00 	movl   $0x6,-0xc(%rbp)
+  2e:	c7 45 f8 14 00 00 00 	movl   $0x14,-0x8(%rbp)
+  35:	83 7d fc 00          	cmpl   $0x0,-0x4(%rbp)
+  39:	75 07                	jne    42 <f+0x42>
+  3b:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%rbp)
+  42:	8b 55 f4             	mov    -0xc(%rbp),%edx
+  45:	89 d0                	mov    %edx,%eax
+  47:	c1 e0 02             	shl    $0x2,%eax
+  4a:	01 d0                	add    %edx,%eax
+  4c:	01 c0                	add    %eax,%eax
+  4e:	89 c2                	mov    %eax,%edx
+  50:	8b 45 f8             	mov    -0x8(%rbp),%eax
+  53:	01 d0                	add    %edx,%eax
+  55:	89 05 00 00 00 00    	mov    %eax,0x0(%rip)        # 5b <f+0x5b>
+			57: R_X86_64_PC32	Z-0x4
+  5b:	90                   	nop
+  5c:	5d                   	pop    %rbp
+  5d:	c3                   	retq   
+
+
+Dump of A-2.o using objdump options --prefix-addresses
+------------------------------------------------------
+
+  A-2.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+f():
+0000000000000000 <f> endbr64 
+0000000000000004 <f+0x4> push   %rbp
+0000000000000005 <f+0x5> mov    %rsp,%rbp
+0000000000000008 <f+0x8> mov    0x0(%rip),%eax        # 000000000000000e <f+0xe>
+			a: R_X86_64_PC32	Z-0x4
+000000000000000e <f+0xe> mov    %eax,-0x4(%rbp)
+0000000000000011 <f+0x11> cmpl   $0x9,-0x4(%rbp)
+0000000000000015 <f+0x15> jg     0000000000000027 <f+0x27>
+0000000000000017 <f+0x17> movl   $0x5,-0xc(%rbp)
+000000000000001e <f+0x1e> movl   $0x11,-0x8(%rbp)
+0000000000000025 <f+0x25> jmp    0000000000000042 <f+0x42>
+0000000000000027 <f+0x27> movl   $0x6,-0xc(%rbp)
+000000000000002e <f+0x2e> movl   $0x14,-0x8(%rbp)
+0000000000000035 <f+0x35> cmpl   $0x0,-0x4(%rbp)
+0000000000000039 <f+0x39> jne    0000000000000042 <f+0x42>
+000000000000003b <f+0x3b> movl   $0x0,-0x8(%rbp)
+0000000000000042 <f+0x42> mov    -0xc(%rbp),%edx
+0000000000000045 <f+0x45> mov    %edx,%eax
+0000000000000047 <f+0x47> shl    $0x2,%eax
+000000000000004a <f+0x4a> add    %edx,%eax
+000000000000004c <f+0x4c> add    %eax,%eax
+000000000000004e <f+0x4e> mov    %eax,%edx
+0000000000000050 <f+0x50> mov    -0x8(%rbp),%eax
+0000000000000053 <f+0x53> add    %edx,%eax
+0000000000000055 <f+0x55> mov    %eax,0x0(%rip)        # 000000000000005b <f+0x5b>
+			57: R_X86_64_PC32	Z-0x4
+000000000000005b <f+0x5b> nop
+000000000000005c <f+0x5c> pop    %rbp
+000000000000005d <f+0x5d> retq

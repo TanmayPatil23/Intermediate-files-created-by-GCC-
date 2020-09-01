@@ -1,0 +1,138 @@
+B-4.c file -- C source code that should be preprocessed.
+--------------------------------------------------------
+
+int main()
+{
+    int a, b, c;
+    b = (a + c + b) * (c + a);
+    return b;
+}
+
+
+
+B-4.i file -- C source code that should not be preprocessed.
+-----------------------------------------------------------
+
+# 1 "B-4.c"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 31 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 32 "<command-line>" 2
+# 1 "B-4.c"
+int main()
+{
+    int a, b, c;
+    b = (a + c + b) * (c + a);
+    return b;
+}
+
+
+
+B-4.s file -- Assembler code.
+-----------------------------
+
+	.file	"B-4.c"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	-12(%rbp), %edx
+	movl	-8(%rbp), %eax
+	addl	%eax, %edx
+	movl	-4(%rbp), %eax
+	leal	(%rdx,%rax), %ecx
+	movl	-8(%rbp), %edx
+	movl	-12(%rbp), %eax
+	addl	%edx, %eax
+	imull	%ecx, %eax
+	movl	%eax, -4(%rbp)
+	movl	-4(%rbp), %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 9.3.0-10ubuntu2) 9.3.0"
+	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.align 8
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.align 8
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 8
+4:
+
+
+
+Dump of B-4.o using objdump options -l -d -r
+--------------------------------------------
+
+B-4.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <main>:
+main():
+   0:	f3 0f 1e fa          	endbr64 
+   4:	55                   	push   %rbp
+   5:	48 89 e5             	mov    %rsp,%rbp
+   8:	8b 55 f4             	mov    -0xc(%rbp),%edx
+   b:	8b 45 f8             	mov    -0x8(%rbp),%eax
+   e:	01 c2                	add    %eax,%edx
+  10:	8b 45 fc             	mov    -0x4(%rbp),%eax
+  13:	8d 0c 02             	lea    (%rdx,%rax,1),%ecx
+  16:	8b 55 f8             	mov    -0x8(%rbp),%edx
+  19:	8b 45 f4             	mov    -0xc(%rbp),%eax
+  1c:	01 d0                	add    %edx,%eax
+  1e:	0f af c1             	imul   %ecx,%eax
+  21:	89 45 fc             	mov    %eax,-0x4(%rbp)
+  24:	8b 45 fc             	mov    -0x4(%rbp),%eax
+  27:	5d                   	pop    %rbp
+  28:	c3                   	retq   
+
+
+
+Dump of B-4.o using objdump options --prefix-addresses
+------------------------------------------------------
+
+B-4.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+main():
+0000000000000000 <main> endbr64 
+0000000000000004 <main+0x4> push   %rbp
+0000000000000005 <main+0x5> mov    %rsp,%rbp
+0000000000000008 <main+0x8> mov    -0xc(%rbp),%edx
+000000000000000b <main+0xb> mov    -0x8(%rbp),%eax
+000000000000000e <main+0xe> add    %eax,%edx
+0000000000000010 <main+0x10> mov    -0x4(%rbp),%eax
+0000000000000013 <main+0x13> lea    (%rdx,%rax,1),%ecx
+0000000000000016 <main+0x16> mov    -0x8(%rbp),%edx
+0000000000000019 <main+0x19> mov    -0xc(%rbp),%eax
+000000000000001c <main+0x1c> add    %edx,%eax
+000000000000001e <main+0x1e> imul   %ecx,%eax
+0000000000000021 <main+0x21> mov    %eax,-0x4(%rbp)
+0000000000000024 <main+0x24> mov    -0x4(%rbp),%eax
+0000000000000027 <main+0x27> pop    %rbp
+0000000000000028 <main+0x28> retq
